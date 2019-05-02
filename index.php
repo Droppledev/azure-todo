@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 $host = "droppledev.database.windows.net";
 $user = "droppledev";
 $pass = "testAzure19";
@@ -117,3 +118,7 @@ if (isset($_POST['add'])) {
 </body>
 
 </html>
+=======
+echo 'hello todo azure app';
+?>
+>>>>>>> 192c67c80a83b4975fa68fb97ab9445bb955701f
