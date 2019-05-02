@@ -26,8 +26,9 @@ if (isset($_POST['add'])) {
     try {
         $id = $_POST['id'];
         $sql_delete = "DELETE FROM $table_name WHERE id = ?";
+        $stmt = $conn->prepare($sql_delete);
         $stmt->bindValue(1, $id);
-        $stmt = $conn->query($sql_delete);
+        $stmt->execute();
     } catch (Exception $e) {
         echo "Failed: " . $e;
     }
@@ -64,18 +65,17 @@ if (isset($_POST['add'])) {
 
             <table class="table col-md-4">
                 <tbody>
-                    <tr>
-                        <?php
-                        try {
-                            $sql_select = "SELECT * FROM $table_name";
-                            $stmt = $conn->query($sql_select);
-                            $todos = $stmt->fetchAll();
-                            if (count($todos) > 0) {
-                                foreach ($todos as $todo) {
-                                    ?>
+                    <?php
+                    try {
+                        $sql_select = "SELECT * FROM $table_name";
+                        $stmt = $conn->query($sql_select);
+                        $todos = $stmt->fetchAll();
+                        if (count($todos) > 0) {
+                            foreach ($todos as $todo) {
+                                ?>
                                 <tr>
-                                    <td><?= $todo['todo'] ?></td>;
-                                    <td>
+                                    <td class="text-center"><?= $todo['todo'] ?></td>
+                                    <td class="text-center">
                                         <form action="" method="post">
                                             <input type="hidden" name="id" value="<?= $todo['id'] ?>">
                                             <button class="btn btn-danger" type="submit" name="delete"><i class="fas fa-trash"></i></button>
@@ -85,7 +85,7 @@ if (isset($_POST['add'])) {
                             <?php
                         }
                     } else {
-                        echo "<h3>No one is currently registered.</h3>";
+                        echo "<h3>Todo list is empty !</h3>";
                     }
                 } catch (Exception $e) {
                     echo "Failed: " . $e;
