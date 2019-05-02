@@ -62,49 +62,36 @@ if (isset($_POST['add'])) {
             </form>
         </div>
         <div class="d-flex justify-content-center">
-
-            <table class="table col-md-4">
-                <tbody>
+            <?php
+            try {
+                $sql_select = "SELECT * FROM $table_name";
+                $stmt = $conn->query($sql_select);
+                $todos = $stmt->fetchAll();
+                if (count($todos) > 0) {
+                    echo '<table class="table col-md-4">';
+                    echo '<tbody>';
+                    foreach ($todos as $todo) {
+                        ?>
+                        <tr>
+                            <td class="text-center"><?= $todo['todo'] ?></td>
+                            <td class="text-center">
+                                <form action="" method="post">
+                                    <input type="hidden" name="id" value="<?= $todo['id'] ?>">
+                                    <button class="btn btn-danger" type="submit" name="delete"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
                     <?php
-                    try {
-                        $sql_select = "SELECT * FROM $table_name";
-                        $stmt = $conn->query($sql_select);
-                        $todos = $stmt->fetchAll();
-                        if (count($todos) > 0) {
-                            foreach ($todos as $todo) {
-                                ?>
-                                <tr>
-                                    <td class="text-center"><?= $todo['todo'] ?></td>
-                                    <td class="text-center">
-                                        <form action="" method="post">
-                                            <input type="hidden" name="id" value="<?= $todo['id'] ?>">
-                                            <button class="btn btn-danger" type="submit" name="delete"><i class="fas fa-trash"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php
-                        }
-                    } else {
-                        echo "<h3>Todo list is empty !</h3>";
-                    }
-                } catch (Exception $e) {
-                    echo "Failed: " . $e;
                 }
-                ?>
-                    <!-- <td>Todo 1</td>
-                        <td>
-                            <form action="" method="post">
-                                <input type="hidden" name="id" value="">
-                                <button class="btn btn-danger" type="submit" name="delete"><i class="fas fa-trash"></i></button>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Todo 2</td>
-                        <td><button class="btn btn-danger" type="submit"><i class="fas fa-trash"></i></button></td>
-                    </tr> -->
-                </tbody>
-            </table>
+                echo '</tbody>';
+                echo '</table>';
+            } else {
+                echo "<h3>Todo list is empty !</h3>";
+            }
+        } catch (Exception $e) {
+            echo "Failed: " . $e;
+        }
+        ?>
         </div>
 
 
